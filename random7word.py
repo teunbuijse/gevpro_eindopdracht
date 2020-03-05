@@ -6,10 +6,8 @@ import random
 
 
 def random_word_picker():
-    with open('words.json') as f:
-        data = json.load(f)
-        data = data.get('words')
-    ties = [word for word in data if len(word) == 7]
+    with open('alle_nederlandse_woorden') as f:
+        ties = [word for word in f if len(word) == 7]
     my_list = []
     history = ''
     for word in ties:
@@ -24,8 +22,9 @@ def random_word_picker():
             history = ''
     random_word = random.choice(my_list)
     random_word_list = [char for char in random_word]
-    return random_word_list
+    print(random_word_list)
 
+random_word_picker()
 
 
 
