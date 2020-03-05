@@ -11,9 +11,20 @@ entry1=Entry(root, width = 10)
 entry1.place(x=160,y=470)
 entry1.configure(highlightbackground = 'lightgray', background = 'lightgray')
 
+def four_or_longer():
+	with open('alle_nederlandse_woorden', encoding="utf-8") as f:
+		f = [line.rstrip('\n') for line in f]
+		listing = []
+	for x in f:
+		if len(x) > 3:
+			listing.append(x)
+	return listing
+	
+input = four_or_longer()
 
 def random_word_picker():
-	with open('alle_nederlandse_woorden') as f:
+	with open('alle_nederlandse_woorden', encoding="utf-8") as f:
+		f = [line.rstrip('\n') for line in f]
 		ties = [word for word in f if len(word) == 7]
 		my_list = []
 	history = ''
@@ -33,15 +44,37 @@ def random_word_picker():
 	return random_word_list 
 	
 random_list = random_word_picker()
-print (random_list)
+
+def charCount(word): 
+    dict = {} 
+    for i in word: 
+        dict[i] = dict.get(i, 0) + 1
+    return dict
+  
+def possible_words(input, random_list):
+	list_valid_words = [] 
+	for word in input: 
+		flag = 1
+		chars = charCount(word) 
+		for key in chars: 
+			if key not in random_list: 
+				flag = 0
+			else: 
+				if random_list.count(key) != chars[key]: 
+					flag = 0
+		if flag == 1:
+			list_valid_words.append(word) 
+	return list_valid_words
+	
+list_valid_words1 = possible_words(input, random_list)
+print (list_valid_words1)
 
 def save_input():
 	woordinput = entry1.get()
-	with open('alle_nederlandse_woorden') as f:
-		if woordinput in f:
-			label2 = Label(root, text= woordinput)
-			label2.configure(width=10, background = 'lightgray', font=("Courier", 30))
-			label2.place(x=600, y=90)
+	if woordinput in list_valid_words1:
+		label2 = Label(root, text= woordinput)
+		label2.configure(width=10, background = 'lightgray', font=("Courier", 30))
+		label2.place(x=600, y=90)
 	entry1.delete(0, END)
 	return (woordinput)
 	
