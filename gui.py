@@ -46,25 +46,24 @@ def random_word_picker():
 random_list = random_word_picker()
 
 def charCount(word): 
-    dict = {} 
+    dict = {}
     for i in word: 
         dict[i] = dict.get(i, 0) + 1
     return dict
   
 def possible_words(input, random_list):
-	list_valid_words = [] 
+	middle_char = re.compile(random_list[3])
+	list_valid_words = []
 	for word in input: 
 		flag = 1
-		chars = charCount(word) 
+		chars = charCount(word)
 		for key in chars: 
 			if key not in random_list: 
 				flag = 0
-			else: 
-				if random_list.count(key) != chars[key]: 
-					flag = 0
 		if flag == 1:
-			list_valid_words.append(word) 
-	return list_valid_words
+			list_valid_words.append(word)
+	final_word_list = [word for word in list_valid_words if middle_char.findall(word)] 
+	return final_word_list
 	
 list_valid_words1 = possible_words(input, random_list)
 print (list_valid_words1)
