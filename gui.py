@@ -164,6 +164,9 @@ def klik6():
 	
 def klik7():
 	entry1.insert('end',random_list[6])
+	
+def cleartext():
+	entry1.delete(0, END)
 
 
 button1 = Button(root, text= random_list[0], command=klik1)
@@ -173,6 +176,7 @@ button4 = Button(root, text= random_list[3], command=klik4, highlightbackground 
 button5 = Button(root, text= random_list[4], command=klik5)
 button6 = Button(root, text= random_list[5], command=klik6)
 button7 = Button(root, text= random_list[6], command=klik7)
+clearbutton = Button(root,text="Clear", command=cleartext, height = 1, width = 10, highlightbackground = 'green', bg = 'green')
 submitbutton = Button(root, text = 'Submit', height = 1, width = 10, command= save_input, highlightbackground = 'green', bg = 'green')
 hintbutton = Button(root, text = 'Hint?', height = 1, width = 10, command= hint_venster, highlightbackground = '#FEE12B', bg = '#FEE12B')
 
@@ -192,6 +196,7 @@ button6.configure(font=("Courier", 20, "bold"))
 button7.place(x=320, y=210, width=115, height=115)
 button7.configure(font=("Courier", 20, "bold"))
 submitbutton.place(x=270, y=475)
-hintbutton.place(x=400, y=475)
+clearbutton.place(x=370, y=475)
+hintbutton.place(x=470, y=475)
 
 root.mainloop()
