@@ -8,10 +8,11 @@ root = Tk()
 root.geometry("900x600")
 root.configure(background = 'lightgray')
 root.title("SpellingBee")
-
+score = 0
 entry1=Entry(root)
 entry1.place(x=130,y=475, width = 115, height = 30)
 entry1.configure(highlightbackground = 'white', background = 'white')
+
 
 def four_or_longer():
 	with open('woordenlijst.txt', encoding="utf-8") as f:
@@ -69,29 +70,43 @@ def possible_words(input, random_list):
 	
 list_valid_words1 = possible_words(input, random_list)
 print (list_valid_words1)
+label1 = Label(root, text= 'Zoek woorden van vier of meer letters in de honingraad.')
+label1.configure(width=60, background = 'lightgray', font=("Courier", 11))
+label1.place(x=25, y=430)
+label3 = Label(root, text= 'Punten: {}'.format(score))
+label3.configure(width=20, background = 'green', font=("Courier", 15))
+label3.place(x=600, y=490)
+label4 = Label(root, text= 'Woorden: {}'.format(len(list_valid_words1)))
+label4.configure(width=20, background = 'lightgray', font=("Courier", 15))
+label4.place(x=600, y=450)
 
 def save_input():
 	woordinput = entry1.get()
+	pangram = 0
 	if woordinput in list_valid_words1:
 		list_valid_words1.pop(list_valid_words1.index(woordinput))
 		global score
 
 				
-	#	if len(woordinput) == 7:
-	#		for index, letter in enumerate(woordinput):
-	#			if letter in woordinput[index:]:
-	#				pass
-	#				score += 7
-		score += len(woordinput) - 3
+		if len(woordinput) == 7:
+			for letter in random_list:
+				if letter in woordinput:
+					pangram += 1
+			if pangram == 7:
+				score += 7
+			else:
+				score += len(woordinput) - 3
+		else:
+			score += len(woordinput) - 3
 		label2 = Label(root, text= woordinput)
 		label2.configure(width=10, background = 'lightgray', font=("Courier", 30))
 		label2.place(x=600, y=90)
 		label3 = Label(root, text= 'Punten: {}'.format(score))
 		label3.configure(width=20, background = 'green', font=("Courier", 15))
 		label3.place(x=600, y=490)
-		label3 = Label(root, text= 'Woorden: {}'.format(len(list_valid_words1)))
-		label3.configure(width=20, background = 'lightgray', font=("Courier", 15))
-		label3.place(x=600, y=450)
+		label4 = Label(root, text= 'Woorden: {}'.format(len(list_valid_words1)))
+		label4.configure(width=20, background = 'lightgray', font=("Courier", 15))
+		label4.place(x=600, y=450)
 	entry1.delete(0, END)
 	return (woordinput)
 
@@ -109,6 +124,10 @@ def give_hint():
 		
 	
 	print(hint)
+	
+	
+
+	
 	
 
 def klik1():
@@ -132,7 +151,7 @@ def klik6():
 def klik7():
 	entry1.insert('end',random_list[6])
 
-score = 0
+
 button1 = Button(root, text= random_list[0], command=klik1)
 button2 = Button(root, text= random_list[1], command=klik2)
 button3 = Button(root, text= random_list[2], command=klik3)
