@@ -1,4 +1,6 @@
 from tkinter import *
+from tkinter import ttk
+import tkinter as tk
 from random import *
 import random
 import string
@@ -114,20 +116,32 @@ def save_input():
 def give_hint():
 	global score
 	score -= 1
-	hint = ''
-	hint_word = list_valid_words1[randrange(0,len(list_valid_words1))]
-	for letter in range(len(hint_word)):
-		if letter % 2 == 0:
-			hint += hint_word[letter]
-		else:
-			hint += '.'
-		
-	
-	print(hint)
-	
-	
+	hint_word = random.choice(list_valid_words1)
+	if len(hint_word) == 4 or 5:
+		reveal_2nd_letter = hint_word[1]
+		reveal_4th_letter = hint_word[3]
+		return "Er is een woord over met deze vorm: \" _ {0} _ {1} _ \"".format(reveal_2nd_letter, reveal_4th_letter)
+	elif len(hint_word) == 6:
+		reveal_1st_letter = hint_word[0]
+		reveal_3rd_letter = hint_word[2]
+		reveal_5th_letter = hint_word[4]
+		return "Er is een woord over met deze vorm: \"{0} _ {1} _ {2} _\"".format(reveal_1st_letter, reveal_3rd_letter, reveal_5th_letter)
+	else:
+		reveal_1st_letter = hint_word[0]
+		reveal_2nd_letter = hint_word[1]
+		reveal_4th_letter = hint_word[3]
+		reveal_7th_letter = hint_word[6]
+		return "Er is een woord over met deze vorm: \"{0}{1} _ {2} _ _ {3}...\"".format(reveal_1st_letter, reveal_2nd_letter, reveal_4th_letter, reveal_7th_letter)
 
 	
+def hint_venster():
+	hint_popup = tk.Tk()
+	hint_popup.wm_title("Hier is je hint !")
+	label = ttk.Label(hint_popup, text=give_hint())
+	label.pack(side="top", fill="x", pady=20)
+	Button = ttk.Button(hint_popup, text="Sluiten", command = hint_popup.destroy)
+	Button.pack()
+	hint_popup.mainloop()
 	
 
 def klik1():
@@ -160,7 +174,7 @@ button5 = Button(root, text= random_list[4], command=klik5)
 button6 = Button(root, text= random_list[5], command=klik6)
 button7 = Button(root, text= random_list[6], command=klik7)
 submitbutton = Button(root, text = 'Submit', height = 1, width = 10, command= save_input, highlightbackground = 'green', bg = 'green')
-hintbutton = Button(root, text = 'Hint?', height = 1, width = 10, command= give_hint, highlightbackground = '#FEE12B', bg = '#FEE12B')
+hintbutton = Button(root, text = 'Hint?', height = 1, width = 10, command= hint_venster, highlightbackground = '#FEE12B', bg = '#FEE12B')
 
 
 button1.place(x=80, y=90, width=115, height=115)
