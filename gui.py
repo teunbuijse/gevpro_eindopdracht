@@ -6,26 +6,15 @@ import random
 import string
 
 
-root = Tk()
-root.geometry("900x600")
-root.configure(background = 'lightgray')
-root.title("SpellingBee")
-score = 0
-entry1=Entry(root)
-entry1.place(x=130,y=475, width = 115, height = 30)
-entry1.configure(highlightbackground = 'white', background = 'white')
 
 
-def four_or_longer():
-	with open('woordenlijst.txt', encoding="utf-8") as f:
-		f = [line.rstrip('\n') for line in f]
-		listing = []
-	for x in f:
-		if len(x) > 3:
-			listing.append(x)
-	return listing
-	
-input = four_or_longer()
+
+def open_file():
+	with open('woordenlijst.txt',encoding="utf-8") as infile:
+		words = [line.rstrip('\n') for line in infile]
+	return words
+
+
 
 def random_word_picker():
 	with open('woordenlijst.txt', encoding="utf-8") as f:
@@ -47,8 +36,9 @@ def random_word_picker():
 	random_word_list = [char for char in random_word]
 	random.shuffle(random_word_list)
 	return random_word_list 
-	
-random_list = random_word_picker()
+
+
+
 
 def charCount(word): 
     dict = {}
@@ -69,18 +59,6 @@ def possible_words(input, random_list):
 			list_valid_words.append(word)
 	final_word_list = [word for word in list_valid_words if middle_char.findall(word)] 
 	return final_word_list
-	
-list_valid_words1 = possible_words(input, random_list)
-print (list_valid_words1)
-label1 = Label(root, text= 'Zoek woorden van vier of meer letters in de honingraad.')
-label1.configure(width=60, background = 'lightgray', font=("Courier", 11))
-label1.place(x=25, y=430)
-label3 = Label(root, text= 'Punten: {}'.format(score))
-label3.configure(width=20, background = 'green', font=("Courier", 15))
-label3.place(x=600, y=490)
-label4 = Label(root, text= 'Woorden: {}'.format(len(list_valid_words1)))
-label4.configure(width=20, background = 'lightgray', font=("Courier", 15))
-label4.place(x=600, y=450)
 
 def save_input():
 	woordinput = entry1.get()
@@ -169,6 +147,27 @@ def cleartext():
 	entry1.delete(0, END)
 
 
+root = Tk()
+root.geometry("900x600")
+root.configure(background = 'lightgray')
+root.title("SpellingBee")
+score = 0
+entry1=Entry(root)
+entry1.place(x=130,y=475, width = 115, height = 30)
+entry1.configure(highlightbackground = 'white', background = 'white')
+input = open_file()
+random_list = random_word_picker()
+list_valid_words1 = possible_words(input, random_list)
+print (list_valid_words1)
+label1 = Label(root, text= 'Zoek woorden van vier of meer letters in de honingraad.')
+label1.configure(width=60, background = 'lightgray', font=("Courier", 11))
+label1.place(x=25, y=430)
+label3 = Label(root, text= 'Punten: {}'.format(score))
+label3.configure(width=20, background = 'green', font=("Courier", 15))
+label3.place(x=600, y=490)
+label4 = Label(root, text= 'Woorden: {}'.format(len(list_valid_words1)))
+label4.configure(width=20, background = 'lightgray', font=("Courier", 15))
+label4.place(x=600, y=450)
 button1 = Button(root, text= random_list[0], command=klik1)
 button2 = Button(root, text= random_list[1], command=klik2)
 button3 = Button(root, text= random_list[2], command=klik3)
