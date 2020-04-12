@@ -4,25 +4,28 @@ import tkinter as tk
 from random import *
 import random
 import string
-
-
-
+import sys
 
 
 def open_file():
 	with open('woordenlijst.txt',encoding="utf-8") as infile:
-		words = [line.rstrip('\n') for line in infile]
-	return words
+		word_list = [line.rstrip('\n') for line in infile]
+	return word_list
 
 
 
-def random_word_picker():
-	with open('woordenlijst.txt', encoding="utf-8") as f:
-		f = [line.rstrip('\n') for line in f]
-		ties = [word for word in f if len(word) == 7]
-		my_list = []
+def random_word_picker(moeilijkheidsgraad):
+	if moeilijkheidsgraad == 'willekeurig':
+		moeilijkheden = ['makkelijk', 'gemiddeld', 'moeilijk', 'extreem_moeilijk']
+		moeilijkheidsgraad = moeilijkheden[randint(0,3)]
+	print('Moeilijkheidsgraad: ' + moeilijkheidsgraad)
+	file_name = moeilijkheidsgraad + '.txt'
+
+	with open(file_name,encoding="utf-8") as infile:
+		word_list = [line.rstrip('\n') for line in infile]
+	my_list = []
 	history = ''
-	for word in ties:
+	for word in word_list:
 		for char in word:         
 			if char in history:
 				history = ''
@@ -146,56 +149,67 @@ def klik7():
 def cleartext():
 	entry1.delete(0, END)
 
-
-root = Tk()
-root.geometry("900x600")
-root.configure(background = 'lightgray')
-root.title("SpellingBee")
-score = 0
-entry1=Entry(root)
-entry1.place(x=130,y=475, width = 115, height = 30)
-entry1.configure(highlightbackground = 'white', background = 'white')
-input = open_file()
-random_list = random_word_picker()
-list_valid_words1 = possible_words(input, random_list)
-print (list_valid_words1)
-label1 = Label(root, text= 'Zoek woorden van vier of meer letters in de honingraad.')
-label1.configure(width=60, background = 'lightgray', font=("Courier", 11))
-label1.place(x=25, y=430)
-label3 = Label(root, text= 'Punten: {}'.format(score))
-label3.configure(width=20, background = 'green', font=("Courier", 15))
-label3.place(x=600, y=490)
-label4 = Label(root, text= 'Woorden: {}'.format(len(list_valid_words1)))
-label4.configure(width=20, background = 'lightgray', font=("Courier", 15))
-label4.place(x=600, y=450)
-button1 = Button(root, text= random_list[0], command=klik1)
-button2 = Button(root, text= random_list[1], command=klik2)
-button3 = Button(root, text= random_list[2], command=klik3)
-button4 = Button(root, text= random_list[3], command=klik4, highlightbackground = '#FEE12B', bg = '#FEE12B')
-button5 = Button(root, text= random_list[4], command=klik5)
-button6 = Button(root, text= random_list[5], command=klik6)
-button7 = Button(root, text= random_list[6], command=klik7)
-clearbutton = Button(root,text="Clear", command=cleartext, height = 1, width = 10, highlightbackground = 'green', bg = 'green')
-submitbutton = Button(root, text = 'Submit', height = 1, width = 10, command= save_input, highlightbackground = 'green', bg = 'green')
-hintbutton = Button(root, text = 'Hint?', height = 1, width = 10, command= hint_venster, highlightbackground = '#FEE12B', bg = '#FEE12B')
+def error_check(argv):
+	if len(argv) == 3:
+		return
+	else:
+		print('Gebruik: {} *moeilijkheidsgraad (willekeurig, makkelijk, gemiddeld, moeilijk , extreem_moeilijk)* *toon antwoorden (BOOL)*'.format(argv[0]), file=sys.stderr)
+		exit(-1)
+	
 
 
-button1.place(x=80, y=90, width=115, height=115)
-button1.configure(font=("Courier", 20, "bold"))
-button2.place(x=200, y=30, width=115, height=115)
-button2.configure(font=("Courier", 20, "bold"))
-button3.place(x=320, y=90, width=115, height=115)
-button3.configure(font=("Courier", 20, "bold"))
-button4.place(x=200, y=150, width=115, height=115)
-button4.configure(font=("Courier", 20, "bold"))
-button5.place(x=80, y=210, width=115, height=115)
-button5.configure(font=("Courier", 20, "bold"))
-button6.place(x=200, y=270, width=115, height=115)
-button6.configure(font=("Courier", 20, "bold"))
-button7.place(x=320, y=210, width=115, height=115)
-button7.configure(font=("Courier", 20, "bold"))
-submitbutton.place(x=270, y=475)
-clearbutton.place(x=370, y=475)
-hintbutton.place(x=470, y=475)
+if __name__ == '__main__':
+	error_check(sys.argv)
+	root = Tk()
+	root.geometry("900x600")
+	root.configure(background = 'lightgray')
+	root.title("SpellingBee")
+	score = 0
+	entry1=Entry(root)
+	entry1.place(x=130,y=475, width = 115, height = 30)
+	entry1.configure(highlightbackground = 'white', background = 'white')
+	word_list = open_file()
+	random_list = random_word_picker(sys.argv[1])
+	list_valid_words1 = possible_words(word_list, random_list)
+	if sys.argv[2] == 'True':
+		print(list_valid_words1)
+	label1 = Label(root, text= 'Zoek woorden van vier of meer letters in de honingraad.')
+	label1.configure(width=60, background = 'lightgray', font=("Courier", 11))
+	label1.place(x=25, y=430)
+	label3 = Label(root, text= 'Punten: {}'.format(score))
+	label3.configure(width=20, background = 'green', font=("Courier", 15))
+	label3.place(x=600, y=490)
+	label4 = Label(root, text= 'Woorden: {}'.format(len(list_valid_words1)))
+	label4.configure(width=20, background = 'lightgray', font=("Courier", 15))
+	label4.place(x=600, y=450)
+	button1 = Button(root, text= random_list[0], command=klik1)
+	button2 = Button(root, text= random_list[1], command=klik2)
+	button3 = Button(root, text= random_list[2], command=klik3)
+	button4 = Button(root, text= random_list[3], command=klik4, highlightbackground = '#FEE12B', bg = '#FEE12B')
+	button5 = Button(root, text= random_list[4], command=klik5)
+	button6 = Button(root, text= random_list[5], command=klik6)
+	button7 = Button(root, text= random_list[6], command=klik7)
+	clearbutton = Button(root,text="Clear", command=cleartext, height = 1, width = 10, highlightbackground = 'green', bg = 'green')
+	submitbutton = Button(root, text = 'Submit', height = 1, width = 10, command= save_input, highlightbackground = 'green', bg = 'green')
+	hintbutton = Button(root, text = 'Hint?', height = 1, width = 10, command= hint_venster, highlightbackground = '#FEE12B', bg = '#FEE12B')
 
-root.mainloop()
+
+	button1.place(x=80, y=90, width=115, height=115)
+	button1.configure(font=("Courier", 20, "bold"))
+	button2.place(x=200, y=30, width=115, height=115)
+	button2.configure(font=("Courier", 20, "bold"))
+	button3.place(x=320, y=90, width=115, height=115)
+	button3.configure(font=("Courier", 20, "bold"))
+	button4.place(x=200, y=150, width=115, height=115)
+	button4.configure(font=("Courier", 20, "bold"))
+	button5.place(x=80, y=210, width=115, height=115)
+	button5.configure(font=("Courier", 20, "bold"))
+	button6.place(x=200, y=270, width=115, height=115)
+	button6.configure(font=("Courier", 20, "bold"))
+	button7.place(x=320, y=210, width=115, height=115)
+	button7.configure(font=("Courier", 20, "bold"))
+	submitbutton.place(x=270, y=475)
+	clearbutton.place(x=370, y=475)
+	hintbutton.place(x=470, y=475)
+
+	root.mainloop()
