@@ -95,7 +95,7 @@ def save_input():
         label3 = Label(root, text='Punten: {}'.format(score))
         label3.configure(width=20, background='green', font=("Courier", 15))
         label3.place(x=600, y=490)
-        label4 = Label(root, text='Woorden{}'.format(len(list_valid_words1)))
+        label4 = Label(root, text='Woorden: {}'.format(len(list_valid_words1)))
         label4.configure(
             width=20, background='lightgray', font=("Courier", 15))
         label4.place(x=600, y=450)
