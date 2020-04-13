@@ -109,7 +109,7 @@ def give_hint():
     global score
     score -= 1
     hint_word = random.choice(list_valid_words1)
-    if len(hint_word) == 4 or 5:
+    if len(hint_word) == 4 or len(hint_word) == 5:
         reveal_2nd_letter = hint_word[1]
         reveal_4th_letter = hint_word[3]
         return "Er is een woord over met deze vorm:  _ {0} _ {1} _".format(
